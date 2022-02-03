@@ -37,7 +37,7 @@ class WxExcelReader:
         else:
             print("无法识别文件类型")
             return None
-
+            
     def read(self, file, type):
         """
         file: 收支文件
@@ -107,7 +107,7 @@ class WxExcelReader:
         change_col_place(table, "收/支", 0, "收/支")
         change_col_place(table, "交易对方", 1, "交易对方")
         change_col_place(table, "商品", 2, "商品说明")
-        change_col_place(table, "支付方式", 3, "收付方式")
+        change_col_place(table, "支付方式", 3, "收/付款方式")
         change_col_place(table, "金额(元)", 4, "金额")
         change_col_place(table, "当前状态", 5, "交易状态")
         change_col_place(table, "交易类型", 6, "交易分类")
