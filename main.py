@@ -1,3 +1,4 @@
+import re
 import pandas as pd
 
 
@@ -15,12 +16,25 @@ class WxExcelReader:
         self.file4 = file4
         self.output_file = output_file
 
+    def get_table(self, path):
+        """
+        读取表格
+        path: 文件路径
+        """
+        if path.endswith(".csv"):
+            return pd.read_csv(path, header=16)  # 从17行开始读取, header=0为第1行
+        elif path.endswith(".xlsx"):
+            return pd.read_excel(path, header=16)  # 从17行开始读取, header=0为第1行
+        else:
+            print("无法识别文件类型")
+            return None
+
     def read(self, file, type):
         """
         file: 收支文件
         type: 收/支类型
         """
-        table = pd.read_excel(file, header=16)  # 从17行开始读取, header=0为第1行
+        table = self.get_table(file)
         return table.loc[table["收/支"].apply(lambda x: x == type)]
 
     def read_pay(self):
