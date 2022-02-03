@@ -79,6 +79,7 @@ class WxExcelReader:
         writer.close()
 
 
+# 支持读取excel文件和csv文件
 file1 = r"./2021年-01.xlsx"  # 第1季度收支文件
 file2 = r"./2021年-04.xlsx"  # 第2季度收支文件
 file3 = r"./2021年-07.xlsx"  # 第3季度收支文件
