@@ -1,9 +1,17 @@
-import re
 import pandas as pd
+import copy
 
 
 class WxExcelReader:
-    def __init__(self, file1, file2, file3, file4, output_file=r"./XXXX年微信收支表.xlsx"):
+    def __init__(
+        self,
+        file1,
+        file2,
+        file3,
+        file4,
+        output_file=r"./XXXX年微信收支表.xlsx",
+        output_alipay_excel_format=True,
+    ):
         """
         file1: 第1季度收支文件
         file2: 第2季度收支文件
@@ -15,6 +23,7 @@ class WxExcelReader:
         self.file3 = file3
         self.file4 = file4
         self.output_file = output_file
+        self.output_alipay_excel_format = output_alipay_excel_format
 
     def get_table(self, path):
         """
@@ -38,6 +47,9 @@ class WxExcelReader:
         return table.loc[table["收/支"].apply(lambda x: x == type)]
 
     def read_pay(self):
+        """
+        读取支出
+        """
         r1_1 = self.read(self.file1, "支出")
         r1_2 = self.read(self.file2, "支出")
         r1_3 = self.read(self.file3, "支出")
@@ -49,9 +61,14 @@ class WxExcelReader:
             .reset_index(drop=True)
         )
         result.sort_values("交易时间", inplace=True)
+        if self.output_alipay_excel_format:
+            result = self.change_wx_excel_to_alipay_excel(result)
         return result
 
     def read_income(self):
+        """
+        读取收入
+        """
         r2_1 = self.read(self.file1, "收入")
         r2_2 = self.read(self.file2, "收入")
         r2_3 = self.read(self.file3, "收入")
@@ -63,7 +80,42 @@ class WxExcelReader:
             .reset_index(drop=True)
         )
         result.sort_values("交易时间", inplace=True)
+        if self.output_alipay_excel_format:
+            result = self.change_wx_excel_to_alipay_excel(result)
         return result
+
+    def change_wx_excel_to_alipay_excel(self, table):
+        """
+        微信excel格式转支付宝excel格式
+        """
+
+        def change_col_place(table, name, new_place, new_name=None):
+            """
+            移动列
+            table: 表格
+            name: 原列名
+            new_plack: 新位置
+            new_name: 新列名
+            """
+            val = table[name]
+            table.drop(labels=[name], axis=1, inplace=True)
+            if new_name is None:
+                table.insert(new_place, column=name, value=val)  # 插入列
+            else:
+                table.insert(new_place, column=new_name, value=val)  # 插入列
+
+        change_col_place(table, "收/支", 0, "收/支")
+        change_col_place(table, "交易对方", 1, "交易对方")
+        change_col_place(table, "商品", 2, "商品说明")
+        change_col_place(table, "支付方式", 3, "收付方式")
+        change_col_place(table, "金额(元)", 4, "金额")
+        change_col_place(table, "当前状态", 5, "交易状态")
+        change_col_place(table, "交易类型", 6, "交易分类")
+        change_col_place(table, "交易时间", 7, "交易时间")
+        table.drop(labels=["交易单号"], axis=1, inplace=True)
+        table.drop(labels=["商户单号"], axis=1, inplace=True)
+        table.drop(labels=["备注"], axis=1, inplace=True)
+        return table
 
     def write_result_file(self):
         result1 = self.read_pay()
@@ -85,5 +137,8 @@ file2 = r"./2021年-04.xlsx"  # 第2季度收支文件
 file3 = r"./2021年-07.xlsx"  # 第3季度收支文件
 file4 = r"./2021年-10.xlsx"  # 第4季度收支文件
 output_file = r"./2021年微信收支表.xlsx"
-reader = WxExcelReader(file1, file2, file3, file4, output_file)
+output_alipay_excel_format = True  # 是否输出支付宝excel格式, 如果为False输出微信格式
+reader = WxExcelReader(
+    file1, file2, file3, file4, output_file, output_alipay_excel_format
+)
 reader.write_result_file()
