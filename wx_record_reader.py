@@ -87,6 +87,7 @@ class WxExcelReader:
         result3 = result1.append(result2, ignore_index=True).reset_index(drop=True)
         if output_alipay_format:
             result3 = self.alipay_format(result3)
+        result3["金额"] =  result3["金额"].apply(lambda x: x.replace("¥", ""))
         result3["来源"] = "微信"
 
         writer = pd.ExcelWriter(r"./temp/" + filename)
