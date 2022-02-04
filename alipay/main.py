@@ -32,16 +32,26 @@ class AlipayRecordReader:
         # 删除交易关闭(无效)的支出记录
         remove_index = table[(table["收/支"] == "支出") & (table["交易状态"] == "交易关闭")].index
         table.drop(index=remove_index, inplace=True)  # 按条件删除数据
+        # 删除交易时间为空的数据
+        table.dropna(subset=["交易时间"], inplace=True)  # 删除交易时间为空的数据
+
+    def remove_columns(self, table):
+        """
+        删除列
+        """
+        table.drop(
+            columns=["Unnamed: 11", "交易订单号", "商家订单号", "对方账号"], inplace=True
+        )
+        return table
 
     def save_file(self, filename="ww.xlsx"):
         table = self.get_table(self.file)
-        table.drop(columns=["Unnamed: 11"], inplace=True)  # 删除列
-        table.dropna(subset=["交易时间"], inplace=True)  # 删除交易时间为空的数据
         self.remove_rows(table)
+        self.remove_columns(table)
         table.sort_values("交易时间", inplace=True)
         table["来源"] = "支付宝"
 
-        output_path = r"../temp/"+filename
+        output_path = r"../temp/" + filename
         table.to_excel(output_path, index=False)
 
 
