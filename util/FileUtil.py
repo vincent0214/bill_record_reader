@@ -5,6 +5,7 @@ import os
 
 
 class FileUtil:
+    @staticmethod
     def scan_file(path):
         files = []
 

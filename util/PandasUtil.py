@@ -5,6 +5,7 @@ import pandas as pd
 
 
 class PandasUtil:
+    @staticmethod
     def merge_tables(tables):
         result = None
         for table in tables:
