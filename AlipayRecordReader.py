@@ -1,11 +1,12 @@
-from re import T
-from numpy import column_stack
+from re import I
 import pandas as pd
+from util.FileUtil import FileUtil
+from util.PandasUtil import PandasUtil
 
 
 class AlipayRecordReader:
-    def __init__(self, file):
-        self.file = file
+    def __init__(self, files):
+        self.files = files
 
     def get_table(self, path):
         """
@@ -39,13 +40,17 @@ class AlipayRecordReader:
         """
         删除列
         """
-        table.drop(
-            columns=["Unnamed: 11", "交易订单号", "商家订单号", "对方账号"], inplace=True
-        )
+        table.drop(columns=["Unnamed: 11", "交易订单号", "商家订单号", "对方账号"], inplace=True)
         return table
 
     def save_file(self, filename="ww.xlsx"):
-        table = self.get_table(self.file)
+
+        tables = []
+        for file in self.files:
+            table = self.get_table(file.path)
+            tables.append(table)
+        table = PandasUtil.merge_tables(tables)
+
         self.remove_rows(table)
         self.remove_columns(table)
         table.sort_values("交易时间", inplace=True)
@@ -55,6 +60,19 @@ class AlipayRecordReader:
         table.to_excel(output_path, index=False)
 
 
-reader = AlipayRecordReader("./alipay_record_20220202_204423.csv")
+def scan_file_alipay_csv(path="./source"):
+    """
+    扫描支付宝csv文件
+    """
+    result = []
+    files = FileUtil.scan_file(path)
+    for file in files:
+        file_name = file.name
+        if file_name.endswith(".csv") and file_name.startswith("alipay_record"):
+            result.append(file)
+    return result
+
+
+files = scan_file_alipay_csv("./source/")
+reader = AlipayRecordReader(files)
 reader.save_file(filename="2021年支付宝收支表.xlsx")
-print("成功提取支付宝账单数据^_^")
