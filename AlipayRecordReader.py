@@ -24,7 +24,7 @@ class AlipayRecordReader:
 
     def remove_rows(self, table):
         """
-        删除多余的记录
+        删除多余的记录(删除行)
         """
         # 删除收/支为"其他"的记录
         remove_index = table.loc[table["收/支"] == "其他"].index
@@ -51,7 +51,7 @@ class AlipayRecordReader:
         table.sort_values("交易时间", inplace=True)
         table["来源"] = "支付宝"
 
-        output_path = r"../temp/" + filename
+        output_path = r"./temp/" + filename
         table.to_excel(output_path, index=False)
 
 
