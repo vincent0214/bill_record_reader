@@ -2,6 +2,14 @@ import os
 import pandas as pd
 
 
+def make_target_dir():
+    if not os.path.exists("./target"):
+        os.mkdir("./target")
+
+def make_temp_dir():
+    if not os.path.exists("./temp"):
+        os.mkdir("./temp")
+
 def scan_file(path):
     files = []
 
@@ -35,7 +43,7 @@ def merge(tables):
     result.reset_index(drop=True)
     return result
 
-
+make_target_dir()
 files = scan_file(r"./temp/")
 tables = get_tables(files)
 result = merge(tables)
