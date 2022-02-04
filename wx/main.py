@@ -53,6 +53,7 @@ class WxExcelReader:
             .reset_index(drop=True)
         )
         result.sort_values("交易时间", inplace=True)
+        result["来源"] = "微信"
         if self.output_alipay_format:
             result = self.change_wx_excel_to_alipay_excel(result)
         return result
@@ -72,6 +73,7 @@ class WxExcelReader:
             .reset_index(drop=True)
         )
         result.sort_values("交易时间", inplace=True)
+        result["来源"] = "微信"
         if self.output_alipay_format:
             result = self.change_wx_excel_to_alipay_excel(result)
         return result
