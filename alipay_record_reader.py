@@ -1,7 +1,7 @@
 from re import I
 import pandas as pd
-from util.FileUtil import FileUtil
-from util.PandasUtil import PandasUtil
+from util.file_util import FileUtil
+from util.pandas_util import PandasUtil
 
 
 class AlipayRecordReader:
@@ -73,6 +73,7 @@ def scan_file_alipay_csv(path="./source"):
     return result
 
 
-files = scan_file_alipay_csv("./source/")
-reader = AlipayRecordReader(files)
-reader.save_file(filename="2021年支付宝收支表.xlsx")
+def read_alipay_record():
+    files = scan_file_alipay_csv("./source")
+    reader = AlipayRecordReader(files)
+    reader.save_file(filename="支付宝收支表.xlsx")

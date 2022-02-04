@@ -1,6 +1,6 @@
 import pandas as pd
-from util.PandasUtil import PandasUtil
-from util.FileUtil import FileUtil
+from util.pandas_util import PandasUtil
+from util.file_util import FileUtil
 
 
 class WxExcelReader:
@@ -108,6 +108,7 @@ def scan_file_wx_csv():
     return result
 
 
-files = scan_file_wx_csv()
-reader = WxExcelReader(files=files)
-reader.write_result_file(filename="2021年微信收支表.xlsx")
+def read_wx_record():
+    files = scan_file_wx_csv()
+    reader = WxExcelReader(files=files)
+    reader.write_result_file(filename="微信收支表.xlsx")
