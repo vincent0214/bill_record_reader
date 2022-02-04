@@ -15,7 +15,15 @@ class FileUtil:
                 if os.path.isdir(file_path):
                     _scan_file(file_path)
                 else:
-                    files.append(file_path)
+                    file = File(file_path)
+                    files.append(file)
 
         _scan_file(path)
         return files
+
+
+class File:
+    def __init__(self, path):
+        self.name = os.path.basename(path)
+        self.path = path
+    
