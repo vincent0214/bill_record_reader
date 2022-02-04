@@ -106,9 +106,7 @@ class WxExcelReader:
         change_col_place(table, "当前状态", 5, "交易状态")
         change_col_place(table, "交易类型", 6, "交易分类")
         change_col_place(table, "交易时间", 7, "交易时间")
-        change_col_place(table, "交易单号", 8, "交易订单号")
-        change_col_place(table, "商户单号", 9, "商家订单号")
-        table.drop(labels=["备注"], axis=1, inplace=True)
+        table.drop(columns=["备注", "交易单号", "商户单号"], inplace=True)
         return table
 
     def write_result_file(self, filename="XXXX年微信收支表.xlsx"):
