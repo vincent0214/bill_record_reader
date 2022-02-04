@@ -29,8 +29,8 @@ def main(output_file_name):
     temp_dir_path = os.getcwd() + "/temp"
     FileUtil.clean_dir(temp_dir_path)
     FileUtil.clean_dir("./target")
-    read_alipay_record()
-    read_wx_record()
+    read_alipay_record()  # 读取支付宝账单
+    read_wx_record()  # 读取微信账单
     files = FileUtil.scan_file(temp_dir_path)
     tables = get_tables(files)
     result = PandasUtil.merge_tables(tables)
