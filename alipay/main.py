@@ -39,6 +39,7 @@ class AlipayRecordReader:
         table.dropna(subset=["交易时间"], inplace=True)  # 删除交易时间为空的数据
         self.remove_rows(table)
         table.sort_values("交易时间", inplace=True)
+        table["来源"] = "支付宝"
 
         output_path = r"../temp/"+filename
         table.to_excel(output_path, index=False)
