@@ -43,14 +43,15 @@ class AlipayRecordReader:
         table.drop(columns=["Unnamed: 11", "交易订单号", "商家订单号", "对方账号"], inplace=True)
         return table
 
-    def save_file(self, filename="ww.xlsx"):
-
+    def get_table_by_files(self, files):
         tables = []
-        for file in self.files:
-            table = self.get_table(file.path)
-            tables.append(table)
-        table = PandasUtil.merge_tables(tables)
+        for file in files:
+            result = self.get_table(file.path)
+            tables.append(result)
+        return PandasUtil.merge_tables(tables)
 
+    def save_file(self, filename="ww.xlsx"):
+        table = self.get_table_by_files(self.files)
         self.remove_rows(table)
         self.remove_columns(table)
         table.sort_values("交易时间", inplace=True)
