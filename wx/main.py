@@ -112,8 +112,8 @@ class WxExcelReader:
         change_col_place(table, "当前状态", 5, "交易状态")
         change_col_place(table, "交易类型", 6, "交易分类")
         change_col_place(table, "交易时间", 7, "交易时间")
-        table.drop(labels=["交易单号"], axis=1, inplace=True)
-        table.drop(labels=["商户单号"], axis=1, inplace=True)
+        change_col_place(table, "交易单号", 8, "交易订单号")
+        change_col_place(table, "商户单号", 9, "商家订单号")
         table.drop(labels=["备注"], axis=1, inplace=True)
         return table
 
