@@ -14,6 +14,7 @@ class PandasUtil:
         for table in tables:
             if result is None:
                 result = table
+                continue
             result = result.append(table, ignore_index=True)
         result.reset_index(drop=True)
         return result

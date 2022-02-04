@@ -18,7 +18,7 @@ class AlipayRecordReader:
                 path, encoding="GBK", header=1, sep="\s*,\s*"
             )  # sep="\s*,\s*"去除csv空格
         elif path.endswith(".xlsx"):
-            return pd.read_excel(path, encoding="GBK")
+            return pd.read_excel(path, header=1)
         else:
             print("无法识别文件类型")
             return None
