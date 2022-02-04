@@ -1,17 +1,10 @@
+from fileinput import filename
 import pandas as pd
 import copy
 
 
 class WxExcelReader:
-    def __init__(
-        self,
-        file1,
-        file2,
-        file3,
-        file4,
-        output_file=r"./XXXX年微信收支表.xlsx",
-        output_alipay_excel_format=True,
-    ):
+    def __init__(self, file1, file2, file3, file4, output_alipay_format=False):
         """
         file1: 第1季度收支文件
         file2: 第2季度收支文件
@@ -22,8 +15,7 @@ class WxExcelReader:
         self.file2 = file2
         self.file3 = file3
         self.file4 = file4
-        self.output_file = output_file
-        self.output_alipay_excel_format = output_alipay_excel_format
+        self.output_alipay_format = output_alipay_format
 
     def get_table(self, path):
         """
@@ -37,7 +29,7 @@ class WxExcelReader:
         else:
             print("无法识别文件类型")
             return None
-            
+
     def read(self, file, type):
         """
         file: 收支文件
@@ -61,7 +53,7 @@ class WxExcelReader:
             .reset_index(drop=True)
         )
         result.sort_values("交易时间", inplace=True)
-        if self.output_alipay_excel_format:
+        if self.output_alipay_format:
             result = self.change_wx_excel_to_alipay_excel(result)
         return result
 
@@ -80,7 +72,7 @@ class WxExcelReader:
             .reset_index(drop=True)
         )
         result.sort_values("交易时间", inplace=True)
-        if self.output_alipay_excel_format:
+        if self.output_alipay_format:
             result = self.change_wx_excel_to_alipay_excel(result)
         return result
 
@@ -117,12 +109,12 @@ class WxExcelReader:
         table.drop(labels=["备注"], axis=1, inplace=True)
         return table
 
-    def write_result_file(self):
+    def write_result_file(self, filename="XXXX年微信收支表.xlsx"):
         result1 = self.read_pay()
         result2 = self.read_income()
         result3 = result1.append(result2, ignore_index=True).reset_index(drop=True)
 
-        writer = pd.ExcelWriter(self.output_file)
+        writer = pd.ExcelWriter(r"../temp/" + filename)
         result3.to_excel(writer, index=False, sheet_name="收支")
         result1.to_excel(writer, index=False, sheet_name="支出")
         result2.to_excel(writer, index=False, sheet_name="收入")
@@ -136,9 +128,7 @@ file1 = r"./2021年-01.xlsx"  # 第1季度收支文件
 file2 = r"./2021年-04.xlsx"  # 第2季度收支文件
 file3 = r"./2021年-07.xlsx"  # 第3季度收支文件
 file4 = r"./2021年-10.xlsx"  # 第4季度收支文件
-output_file = r"./2021年微信收支表.xlsx"
-output_alipay_excel_format = True  # 是否输出支付宝excel格式, 如果为False输出微信格式
-reader = WxExcelReader(
-    file1, file2, file3, file4, output_file, output_alipay_excel_format
-)
-reader.write_result_file()
+
+output_alipay_format = True  # 是否输出支付宝excel格式, 如果为False输出微信格式
+reader = WxExcelReader(file1, file2, file3, file4, output_alipay_format)
+reader.write_result_file(filename="2021年微信收支表.xlsx")

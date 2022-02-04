@@ -33,15 +33,17 @@ class AlipayRecordReader:
         remove_index = table[(table["收/支"] == "支出") & (table["交易状态"] == "交易关闭")].index
         table.drop(index=remove_index, inplace=True)  # 按条件删除数据
 
-    def save_file(self, output_path="./ww.xlsx"):
+    def save_file(self, filename="ww.xlsx"):
         table = self.get_table(self.file)
         table.drop(columns=["Unnamed: 11"], inplace=True)  # 删除列
         table.dropna(subset=["交易时间"], inplace=True)  # 删除交易时间为空的数据
         self.remove_rows(table)
         table.sort_values("交易时间", inplace=True)
 
+        output_path = r"../temp/"+filename
         table.to_excel(output_path, index=False)
 
 
 reader = AlipayRecordReader("./alipay_record_20220202_204423.csv")
-reader.save_file(output_path="./2021年支付宝收支表.xlsx")
+reader.save_file(filename="2021年支付宝收支表.xlsx")
+print("成功提取支付宝账单数据^_^")
