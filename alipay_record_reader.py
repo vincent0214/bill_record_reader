@@ -40,7 +40,10 @@ class AlipayRecordReader:
         """
         删除列
         """
-        table.drop(columns=["Unnamed: 11", "交易订单号", "商家订单号", "对方账号"], inplace=True)
+        cols = ["交易订单号", "商家订单号", "对方账号"]
+        if "Unnamed: 11" in table.columns:
+            cols.append("Unnamed: 11")
+        table.drop(columns=cols, inplace=True)
         return table
 
     def get_table_by_files(self, files):
