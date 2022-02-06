@@ -34,7 +34,7 @@ class AlipayRecordReader:
         remove_index = table[(table["收/支"] == "支出") & (table["交易状态"] == "交易关闭")].index
         table.drop(index=remove_index, inplace=True)  # 按条件删除数据
         # 删除交易时间为空的数据
-        table.dropna(subset=["交易时间"], inplace=True)  # 删除交易时间为空的数据
+        table.dropna(subset=["交易时间"], inplace=True)
 
     def remove_columns(self, table):
         """
