@@ -4,20 +4,20 @@
 
 ## 如何运行?
 1. 安装依赖
-```python
-pip install pandas
+```bash
+pip install -r requirements.txt
 ```
 2. 从微信和支付宝APP中导出账单csv文件
 
 3. 把`微信账单csv文件`和`支付宝账单csv文件`放入`source`文件夹
 
-4. 执行代码,合并账单
+4. 执行代码, 合并账单
 ```python
 python main.py
 ```
 5. 查看结果
-   结果存放在`target`文件夹
+结果存放在`target`文件夹
 
 ## 如何修改输出的文件名称?
-打开`main.py`文件,修改变量`output_file_name`
+打开`main.py`文件, 修改变量`output_file_name`
 
