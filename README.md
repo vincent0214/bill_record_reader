@@ -13,6 +13,7 @@ pip install -r requirements.txt
 
 4. 执行代码, 合并账单
 ```python
+cd src
 python main.py
 ```
 5. 查看结果
