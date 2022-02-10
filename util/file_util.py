@@ -35,4 +35,4 @@ class FileUtil:
 class File:
     def __init__(self, path):
         self.name = os.path.basename(path)
-        self.path = path
+        self.path = os.path.abspath(path)
